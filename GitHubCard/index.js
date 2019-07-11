@@ -3,6 +3,50 @@
            https://api.github.com/users/<your name>
 */
 
+const cards = document.querySelector('.cards')
+
+axios.get(`https://api.github.com/users/duraanali`).then(data => {
+  // 1. (see above)
+  // Handles Success: here's where we get the results from server
+  // console.log("About Me iNFO:", data.data);
+  const myInfo = data.data
+
+  myInfo.forEach(info => {
+    // 2. (see above)
+    const element = createMyCard(info)
+    // 3. (see above)
+    cards.appendChild(element)
+  })
+})
+  .catch(error => {
+    // Handles failure:
+    console.log("The Server is currently down", error);
+  });
+
+
+function createMyCard(info) {
+  // create the elements
+  const card = document.createElement('div')
+  const img = document.createElement('img')
+  const cardUserName = document.createElement('h2')
+  const cardInfo = document.createElement('p')
+
+  // set the styles
+  card.classList.add('card')
+  img.classList.add('img')
+  cardUserName.classList.add('username')
+  cardInfo.classList.add('p')
+
+  // set the content
+  img.src = imageUrl
+  title.textContent = `Breed: ${breed}`
+
+  // put together
+  card.appendChild(img)
+  card.appendChild(cardUserName)
+  card.appendChild(cardInfo)
+  return card
+}
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -35,7 +79,7 @@ const followersArray = [];
     <h3 class="name">{users name}</h3>
     <p class="username">{users user name}</p>
     <p>Location: {users location}</p>
-    <p>Profile:  
+    <p>Profile:
       <a href={address to users github page}>{address to users github page}</a>
     </p>
     <p>Followers: {users followers count}</p>
@@ -46,7 +90,7 @@ const followersArray = [];
 
 */
 
-/* List of LS Instructors Github username's: 
+/* List of LS Instructors Github username's:
   tetondan
   dustinmyers
   justsml
