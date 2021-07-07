@@ -3,6 +3,23 @@
            https://api.github.com/users/<your name>
 */
 
+const cards = document.querySelector('.cards')
+
+const myData = axios.get(`https://api.github.com/users/duraanali`).then(data => {
+
+  const userData = data.data;
+  cards.appendChild(createMyCard(userData));
+
+})
+  .catch(error => {
+    // Handles failure:
+    console.log("The Server is currently down", error);
+  });
+
+
+
+
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -14,6 +31,7 @@
            create a new component and add it to the DOM as a child of .cards
 */
 
+
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
           , manually find some other users' github handles, or use the list found 
@@ -24,7 +42,23 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["https://api.github.com/users/tetondan",
+  "https://api.github.com/users/dustinmyers",
+  "https://api.github.com/users/justsml",
+  "https://api.github.com/users/luishrd",
+  "https://api.github.com/users/bigknell"];
+
+followersArray.forEach(followers => {
+  axios.get(followers)
+    .then(data => {
+      const userData = data.data;
+      cards.appendChild(createMyCard(userData));
+    })
+    .catch(error => {
+      // Handles failure:
+      console.log("The Server is currently down", error);
+    });
+})
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -35,7 +69,7 @@ const followersArray = [];
     <h3 class="name">{users name}</h3>
     <p class="username">{users user name}</p>
     <p>Location: {users location}</p>
-    <p>Profile:  
+    <p>Profile:
       <a href={address to users github page}>{address to users github page}</a>
     </p>
     <p>Followers: {users followers count}</p>
@@ -46,7 +80,56 @@ const followersArray = [];
 
 */
 
-/* List of LS Instructors Github username's: 
+function createMyCard(myData) {
+  // create the elements
+  const card = document.createElement('div')
+  const cardImg = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const name = document.createElement('h3')
+  const cardUserName = document.createElement('p')
+  const cardLocation = document.createElement('p')
+  const cardProfileUrl = document.createElement('p')
+  const cardFollowers = document.createElement('p')
+  const cardFollowing = document.createElement('p')
+  const cardBio = document.createElement('p')
+
+  // set the styles
+  card.classList.add('card')
+  cardInfo.classList.add('card-info')
+  name.classList.add('name')
+  cardUserName.classList.add('username')
+
+
+  // set the content
+  name.textContent = myData.name;
+  cardImg.src = myData.avatar_url;
+  cardUserName.textContent = myData.login;
+  cardLocation.textContent = `Location: ${myData.location}`;
+  cardProfileUrl.textContent = `Profile: ${myData.html_url}`;
+  cardBio.textContent = `Bio: ${myData.bio}`;
+  cardFollowers.textContent = `Followers: ${myData.followers}`;
+  cardFollowing.textContent = `Following: ${myData.following}`;
+
+
+
+  // put together
+  card.appendChild(cardImg)
+  card.appendChild(cardUserName)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(name)
+  cardInfo.appendChild(cardUserName)
+  cardInfo.appendChild(cardLocation)
+  cardInfo.appendChild(cardProfileUrl)
+  cardInfo.appendChild(cardFollowers)
+  cardInfo.appendChild(cardFollowing)
+  cardInfo.appendChild(cardBio)
+
+  return card
+}
+
+
+
+/* List of LS Instructors Github username's:
   tetondan
   dustinmyers
   justsml
